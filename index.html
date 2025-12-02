@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazarlar Sayfası</title>
+    <style>
+        /* Genel Sayfa Ayarları */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8; /* Sayfa arka plan rengi */
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #333;
+            align-self: flex-start;
+            margin-left: 10%;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            width: 80%;
+        }
+
+        /* Kartların Bulunduğu Izgara (Grid) Yapısı */
+        .grid-container {
+            display: grid;
+            /* Ekran boyutuna göre otomatik sığdır (yan yana 2 veya 3 tane) */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; /* Kartlar arası boşluk */
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        /* Tekil Kart Tasarımı */
+        .card {
+            background-color: white;
+            border: 1px solid #e1e4e8;
+            border-radius: 12px; /* Köşeleri yuvarlatma */
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Hafif gölge */
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        /* Kartın üzerine gelince (Hover) efekti */
+        .card:hover {
+            transform: translateY(-5px); /* Hafif yukarı kalkma */
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border-color: #4a90e2; /* Kenarlık rengi değişimi */
+        }
+
+        /* Yazar Resmi */
+        .card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Resmi yuvarlak yapma */
+            object-fit: cover; /* Resmin oranını bozmadan kırp */
+            margin-bottom: 15px;
+            border: 3px solid #f0f0f0;
+        }
+
+        /* Yazar İsmi */
+        .card h3 {
+            margin: 0;
+            color: #555;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Alt kısımdaki kategori ismi (Opsiyonel) */
+        .card span {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h2>YAZARLAR</h2>
+
+    <div class="grid-container">
+        
+        <div class="card">
+            <img src="https://via.placeholder.com/150?text=S.Ali" alt="Sabahattin Ali"> 
+            <h3>Sabahattin Ali</h3>
+        </div>
+
+        <div class="card">
+            <img src="https://via.placeholder.com/150?text=Z.Livaneli" alt="Zülfü Livaneli">
+            <h3>Zülfü Livaneli</h3>
+        </div>
+
+        <div class="card">
+            <img src="https://via.placeholder.com/150?text=F.Baykurt" alt="Fakir Baykurt">
+            <h3>Fakir Baykurt</h3>
+        </div>
+
+        <div class="card">
+            <img src="https://via.placeholder.com/150?text=N.Cumali" alt="Necati Cumalı">
+            <h3>Necati Cumalı</h3>
+        </div>
+
+        <div class="card">
+            <img src="https://via.placeholder.com/150?text=Y.Kemal" alt="Yaşar Kemal">
+            <h3>Yaşar Kemal</h3>
+        </div>
+
+        <div class="card">
+            <img src="https://via.placeholder.com/150?text=P.Safa" alt="Peyami Safa">
+            <h3>Peyami Safa</h3>
+        </div>
+
+    </div>
+
+</body>
+</html>
