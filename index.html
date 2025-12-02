@@ -8,7 +8,7 @@
         /* Genel Sayfa Ayarları */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8; /* Sayfa arka plan rengi */
+            background-color: #f4f6f8;
             margin: 0;
             padding: 40px;
             display: flex;
@@ -29,9 +29,8 @@
         /* Kartların Bulunduğu Izgara (Grid) Yapısı */
         .grid-container {
             display: grid;
-            /* Ekran boyutuna göre otomatik sığdır (yan yana 2 veya 3 tane) */
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px; /* Kartlar arası boşluk */
+            gap: 20px;
             width: 80%;
             max-width: 1200px;
         }
@@ -40,27 +39,28 @@
         .card {
             background-color: white;
             border: 1px solid #e1e4e8;
-            border-radius: 12px; /* Köşeleri yuvarlatma */
+            border-radius: 12px;
             padding: 30px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Hafif gölge */
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
             cursor: pointer;
+            height: 100%; /* Kartların eşit boyda olması için */
+            box-sizing: border-box; /* Padding'i yüksekliğe dahil et */
         }
 
-        /* Kartın üzerine gelince (Hover) efekti */
         .card:hover {
-            transform: translateY(-5px); /* Hafif yukarı kalkma */
+            transform: translateY(-5px);
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            border-color: #4a90e2; /* Kenarlık rengi değişimi */
+            border-color: #4a90e2;
         }
 
         /* Yazar Resmi */
         .card img {
             width: 120px;
             height: 120px;
-            border-radius: 50%; /* Resmi yuvarlak yapma */
-            object-fit: cover; /* Resmin oranını bozmadan kırp */
+            border-radius: 50%;
+            object-fit: cover;
             margin-bottom: 15px;
             border: 3px solid #f0f0f0;
         }
@@ -73,12 +73,18 @@
             font-weight: 600;
         }
         
-        /* Alt kısımdaki kategori ismi (Opsiyonel) */
         .card span {
             display: block;
             margin-top: 5px;
             font-size: 0.85rem;
             color: #888;
+        }
+
+        /* Link Etiketi Ayarları (Tıklanabilir Alan) */
+        a.card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
     </style>
@@ -89,10 +95,13 @@
 
     <div class="grid-container">
         
-        <div class="card">
-            <img src="https://via.placeholder.com/150?text=S.Ali" alt="Sabahattin Ali"> 
-            <h3>Sabahattin Ali</h3>
-        </div>
+        <a href="icimizdeki_seytan.pdf" class="card-link" target="_blank">
+            <div class="card">
+                <img src="https://via.placeholder.com/150?text=S.Ali" alt="Sabahattin Ali"> 
+                <h3>Sabahattin Ali</h3>
+                <span>İçimizdeki Şeytan (PDF Oku)</span>
+            </div>
+        </a>
 
         <div class="card">
             <img src="https://via.placeholder.com/150?text=Z.Livaneli" alt="Zülfü Livaneli">
