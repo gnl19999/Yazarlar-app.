@@ -3,132 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yazarlar Sayfası</title>
+    <title>İçimizdeki Şeytan - Flipbook</title>
+    
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/turn.min.js"></script>
+
     <style>
-        /* Genel Sayfa Ayarları */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
             margin: 0;
-            padding: 40px;
+            padding: 0;
+            background-color: #f0f0f0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Kitap Alanı */
+        .flipbook-viewport {
+            width: 80%; /* Görüntüleme alanının genişliği */
+            height: 90vh; /* Görüntüleme alanının yüksekliği */
+            display: flex;
+            justify-content: center;
             align-items: center;
         }
 
-        h2 {
-            color: #333;
-            align-self: flex-start;
-            margin-left: 10%;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-            width: 80%;
+        /* Sayfaların İçine Girdiği Kutu */
+        .flipbook {
+            width: 800px; /* Kitabın tek sayfa genişliği x 2 */
+            height: 500px; /* Kitabın yüksekliği */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Kartların Bulunduğu Izgara (Grid) Yapısı */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px;
-            width: 80%;
-            max-width: 1200px;
-        }
-
-        /* Tekil Kart Tasarımı */
-        .card {
+        /* Tekil Sayfa Görünümü */
+        .flipbook .page {
+            width: 400px; /* Görselinizin genişliği ile eşleşmeli */
+            height: 500px; /* Görselinizin yüksekliği ile eşleşmeli */
             background-color: white;
-            border: 1px solid #e1e4e8;
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-            cursor: pointer;
-            height: 100%; /* Kartların eşit boyda olması için */
-            box-sizing: border-box; /* Padding'i yüksekliğe dahil et */
+            border: 1px solid #ccc;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            border-color: #4a90e2;
-        }
-
-        /* Yazar Resmi */
-        .card img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
+        /* Sayfa görselleri bu img etiketleri içine yerleştirilecek */
+        .flipbook img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            margin-bottom: 15px;
-            border: 3px solid #f0f0f0;
         }
 
-        /* Yazar İsmi */
-        .card h3 {
-            margin: 0;
-            color: #555;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        
-        .card span {
-            display: block;
-            margin-top: 5px;
-            font-size: 0.85rem;
-            color: #888;
-        }
-
-        /* Link Etiketi Ayarları (Tıklanabilir Alan) */
-        a.card-link {
+        /* Geri Dön Butonu Stilini Ekleyelim */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #4a90e2;
+            color: white;
             text-decoration: none;
-            color: inherit;
-            display: block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            z-index: 100;
+            transition: background 0.3s;
         }
 
+        .back-btn:hover {
+            background-color: #357abd;
+        }
     </style>
 </head>
 <body>
 
-    <h2>YAZARLAR</h2>
+    <a href="yazarlar.html" class="back-btn">← Yazarlar Sayfasına Dön</a>
 
-    <div class="grid-container">
-        
-        <a href="icimizdeki_seytan.pdf" class="card-link" target="_blank">
-            <div class="card">
-                <img src="https://via.placeholder.com/150?text=S.Ali" alt="Sabahattin Ali"> 
-                <h3>Sabahattin Ali</h3>
-                <span>İçimizdeki Şeytan (PDF Oku)</span>
+    <div class="flipbook-viewport">
+        <div class="container">
+            <div class="flipbook">
+                <img src="sayfa1.jpg" alt="Sayfa 1"> 
+                <img src="sayfa2.jpg" alt="Sayfa 2">
+                <img src="sayfa3.jpg" alt="Sayfa 3">
+                <img src="sayfa4.jpg" alt="Sayfa 4">
+                <img src="sayfaN.jpg" alt="Son Sayfa">
             </div>
-        </a>
-
-        <div class="card">
-            <img src="https://via.placeholder.com/150?text=Z.Livaneli" alt="Zülfü Livaneli">
-            <h3>Zülfü Livaneli</h3>
         </div>
-
-        <div class="card">
-            <img src="https://via.placeholder.com/150?text=F.Baykurt" alt="Fakir Baykurt">
-            <h3>Fakir Baykurt</h3>
-        </div>
-
-        <div class="card">
-            <img src="https://via.placeholder.com/150?text=N.Cumali" alt="Necati Cumalı">
-            <h3>Necati Cumalı</h3>
-        </div>
-
-        <div class="card">
-            <img src="https://via.placeholder.com/150?text=Y.Kemal" alt="Yaşar Kemal">
-            <h3>Yaşar Kemal</h3>
-        </div>
-
-        <div class="card">
-            <img src="https://via.placeholder.com/150?text=P.Safa" alt="Peyami Safa">
-            <h3>Peyami Safa</h3>
-        </div>
-
     </div>
+
+    <script type="text/javascript">
+        $(function() {
+            // .flipbook divini seçer ve Turn.js'i başlatır
+            $('.flipbook').turn({
+                width: 800, // Kitabın toplam genişliği (tek sayfa x 2)
+                height: 500, // Kitabın yüksekliği
+                autoCenter: true, // Ortalamayı otomatik yapar
+                gradients: true, // Gölge efekti verir
+                elevation: 50, // Sayfa çevirme sırasında yükselme efekti
+                duration: 900 // Sayfa çevirme animasyonu süresi (milisaniye)
+            });
+        });
+    </script>
 
 </body>
 </html>
