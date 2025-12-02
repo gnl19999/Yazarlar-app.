@@ -3,104 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İçimizdeki Şeytan - Flipbook</title>
-    
-    <script type="text/javascript" src="lib/jquery.min.js"></script>
-    <script type="text/javascript" src="lib/turn.min.js"></script>
-
+    <title>Kayan Kelime Kartları (Flip Cards)</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+            gap: 20px; /* Kartlar arasındaki boşluk */
         }
 
-        /* Kitap Alanı */
-        .flipbook-viewport {
-            width: 80%; /* Görüntüleme alanının genişliği */
-            height: 90vh; /* Görüntüleme alanının yüksekliği */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .flip-card {
+            background-color: transparent;
+            width: 200px;
+            height: 150px;
+            perspective: 1000px; /* 3D efekti için */
         }
 
-        /* Sayfaların İçine Girdiği Kutu */
-        .flipbook {
-            width: 800px; /* Kitabın tek sayfa genişliği x 2 */
-            height: 500px; /* Kitabın yüksekliği */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* Tekil Sayfa Görünümü */
-        .flipbook .page {
-            width: 400px; /* Görselinizin genişliği ile eşleşmeli */
-            height: 500px; /* Görselinizin yüksekliği ile eşleşmeli */
-            background-color: white;
-            border: 1px solid #ccc;
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-        }
-
-        /* Sayfa görselleri bu img etiketleri içine yerleştirilecek */
-        .flipbook img {
+        .flip-card-inner {
+            position: relative;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            text-align: center;
+            transition: transform 0.6s; /* Dönme animasyonu süresi */
+            transform-style: preserve-3d; /* 3D uzayda dönmesini sağlar */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            border-radius: 10px;
         }
 
-        /* Geri Dön Butonu Stilini Ekleyelim */
-        .back-btn {
+        /* Kartın üzerine gelindiğinde (hover) dönsün */
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #4a90e2;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            z-index: 100;
-            transition: background 0.3s;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Kartın arkasındaki yüzü gizle */
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
-        .back-btn:hover {
-            background-color: #357abd;
+        .flip-card-front {
+            background-color: #3f51b5; /* Ön yüz rengi (Mavi) */
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
         }
+
+        .flip-card-back {
+            background-color: #ff9800; /* Arka yüz rengi (Turuncu) */
+            color: black;
+            transform: rotateY(180deg); /* Arka yüzü başlangıçta 180 derece döndür */
+            font-size: 1.1em;
+            line-height: 1.3;
+        }
+
+        .word-turkish {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
     </style>
 </head>
 <body>
 
-    <a href="yazarlar.html" class="back-btn">← Yazarlar Sayfasına Dön</a>
-
-    <div class="flipbook-viewport">
-        <div class="container">
-            <div class="flipbook">
-                <img src="sayfa1.jpg" alt="Sayfa 1"> 
-                <img src="sayfa2.jpg" alt="Sayfa 2">
-                <img src="sayfa3.jpg" alt="Sayfa 3">
-                <img src="sayfa4.jpg" alt="Sayfa 4">
-                <img src="sayfaN.jpg" alt="Son Sayfa">
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                About
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">hakkında, yaklaşık</span>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript">
-        $(function() {
-            // .flipbook divini seçer ve Turn.js'i başlatır
-            $('.flipbook').turn({
-                width: 800, // Kitabın toplam genişliği (tek sayfa x 2)
-                height: 500, // Kitabın yüksekliği
-                autoCenter: true, // Ortalamayı otomatik yapar
-                gradients: true, // Gölge efekti verir
-                elevation: 50, // Sayfa çevirme sırasında yükselme efekti
-                duration: 900 // Sayfa çevirme animasyonu süresi (milisaniye)
-            });
-        });
-    </script>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Above
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">üstünde, yukarıda</span>
+            </div>
+        </div>
+    </div>
 
-</body>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Across
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">karşısında, içinden, üstünden</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Activity
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">aktivite, eylem</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Actor
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">erkek oyuncu</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Actress
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">kadın oyuncu / artist</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Add
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">toplamak, eklemek</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                Address
+            </div>
+            <div class="flip-card-back">
+                <span class="word-turkish">hitap etmek, adres</span>
+            </div>
+        </div>
+    </div>
+
+    </body>
 </html>
