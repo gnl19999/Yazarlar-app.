@@ -1,274 +1,133 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slayt Kelime Kartları</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f9;
-            margin: 0;
-        }
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f4f4f9;
+        margin: 0;
+    }
 
-        /* --- Kart Kapsayıcı (Görüntüleme Alanı) --- */
-        .card-container {
-            position: relative;
-            width: 250px; /* Tek kartın genişliği */
-            height: 200px; /* Tek kartın yüksekliği */
-            overflow: hidden; /* Sadece tek kartın görünmesini sağlar */
-            margin-bottom: 20px;
-        }
+    /* --- Kart Kapsayıcı (Görüntüleme Alanı) --- */
+    .card-container {
+        position: relative;
+        width: 250px; /* TEK KART GENİŞLİĞİNE EŞİT */
+        height: 200px;
+        overflow: hidden; /* **ÖNEMLİ:** Sadece tek kartın görünmesini sağlar */
+        margin-bottom: 20px;
+    }
 
-        /* --- Tüm Kartları İçeren Şerit --- */
-        .card-slider {
-            display: flex;
-            width: 100%; /* Başlangıçta 1 kartlık yer */
-            height: 100%;
-            transition: transform 0.4s ease-in-out; /* Kaydırma animasyonu */
-        }
-        
-        /* --- Kart Stili --- */
-        .flip-card {
-            flex-shrink: 0; /* Kartların küçülmesini engeller */
-            background-color: transparent;
-            width: 250px; /* Ekranda görünecek kart genişliği */
-            height: 200px;
-            perspective: 1000px; 
-            margin-right: 0; 
-        }
+    /* --- Tüm Kartları İçeren Şerit --- */
+    .card-slider {
+        /* **ÖNEMLİ DÜZELTME:** Tüm kartların yan yana durmasını sağlar */
+        display: flex; 
+        width: 100%; 
+        height: 100%;
+        transition: transform 0.4s ease-in-out; 
+    }
+    
+    /* --- Kart Stili --- */
+    .flip-card {
+        flex-shrink: 0; /* **ÖNEMLİ:** Kartların küçülmesini veya sığmaya çalışmasını engeller */
+        background-color: transparent;
+        width: 250px; /* Kart genişliği 250px olarak sabit */
+        height: 200px;
+        perspective: 1000px; 
+        margin-right: 0; 
+    }
 
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s; 
-            transform-style: preserve-3d; 
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
-            border-radius: 10px;
-        }
+    /* Geri kalan kart ve buton stilleri aynı kalmalı */
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s; 
+        transform-style: preserve-3d; 
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
 
-        .flip-card-inner.flipped {
-             transform: rotateY(180deg);
-        }
+    .flip-card-inner.flipped {
+         transform: rotateY(180deg);
+    }
 
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; 
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden; 
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+    }
 
-        .flip-card-front {
-            background-color: #3f51b5; 
-            color: white;
-            font-size: 1.8em;
-            font-weight: bold;
-        }
+    .flip-card-front {
+        background-color: #3f51b5; 
+        color: white;
+        font-size: 1.8em;
+        font-weight: bold;
+    }
 
-        .flip-card-back {
-            background-color: #ff9800; 
-            color: black;
-            transform: rotateY(180deg); 
-            font-size: 1.3em;
-            line-height: 1.4;
-        }
+    .flip-card-back {
+        background-color: #ff9800; 
+        color: black;
+        transform: rotateY(180deg); 
+        font-size: 1.3em;
+        line-height: 1.4;
+    }
 
-        .word-turkish {
-            font-weight: bold;
-            margin-top: 5px;
-        }
+    .word-turkish {
+        font-weight: bold;
+        margin-top: 5px;
+    }
 
-        /* --- Buton Stilleri --- */
-        .button-container {
-            display: flex;
-            gap: 15px;
-        }
+    .button-container {
+        display: flex;
+        gap: 15px;
+    }
 
-        .nav-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #00bcd4;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
-        }
+    .nav-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #00bcd4;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: background-color 0.3s;
+    }
 
-        .nav-button:hover {
-            background-color: #0097a7;
-        }
-        
-        .nav-button:disabled {
-            background-color: #b2ebf2;
-            cursor: not-allowed;
-        }
-        
-        .flip-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #8bc34a;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
-        }
-        
-        .flip-button:hover {
-            background-color: #689f38;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="card-container">
-        <div class="card-slider" id="cardSlider">
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">About</div>
-                    <div class="flip-card-back"><span class="word-turkish">hakkında, yaklaşık</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Above</div>
-                    <div class="flip-card-back"><span class="word-turkish">üstünde, yukarıda</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Across</div>
-                    <div class="flip-card-back"><span class="word-turkish">karşısında, içinden, üstünden</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Activity</div>
-                    <div class="flip-card-back"><span class="word-turkish">aktivite, eylem</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Actor</div>
-                    <div class="flip-card-back"><span class="word-turkish">erkek oyuncu</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Actress</div>
-                    <div class="flip-card-back"><span class="word-turkish">kadın oyuncu / artist</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Add</div>
-                    <div class="flip-card-back"><span class="word-turkish">toplamak, eklemek</span></div>
-                </div>
-            </div>
-
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">Address</div>
-                    <div class="flip-card-back"><span class="word-turkish">hitap etmek, adres</span></div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="button-container">
-        <button class="nav-button" onclick="changeCard(-1)" id="prevBtn" disabled>
-            &lt; Önceki
-        </button>
-        <button class="flip-button" onclick="flipCurrentCard()">
-            Çevir
-        </button>
-        <button class="nav-button" onclick="changeCard(1)" id="nextBtn">
-            Sonraki &gt;
-        </button>
-    </div>
-
-    <script>
-        const slider = document.getElementById('cardSlider');
-        const cards = document.querySelectorAll('.flip-card');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        let currentIndex = 0;
-        const cardWidth = 250; // CSS'deki .flip-card genişliği ile aynı olmalı
-
-        // Kart değiştirme fonksiyonu
-        function changeCard(direction) {
-            // Önce kartın çevrilmiş durumunu sıfırla
-            const currentInner = cards[currentIndex].querySelector('.flip-card-inner');
-            currentInner.classList.remove('flipped');
-            
-            // Yeni indeksi hesapla
-            currentIndex += direction;
-
-            // Sınır kontrolleri
-            if (currentIndex < 0) {
-                currentIndex = 0;
-            } else if (currentIndex >= cards.length) {
-                currentIndex = cards.length - 1;
-            }
-
-            // Slider'ı kaydır
-            slider.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-
-            // Buton durumlarını güncelle
-            updateButtonState();
-        }
-
-        // Buton durumlarını güncelleme fonksiyonu
-        function updateButtonState() {
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === cards.length - 1;
-        }
-
-        // Kartı çevirme fonksiyonu
-        function flipCurrentCard() {
-             const currentInner = cards[currentIndex].querySelector('.flip-card-inner');
-             currentInner.classList.toggle('flipped');
-        }
-
-        // Başlangıçta buton durumunu ayarla
-        updateButtonState();
-        
-        // Klavye ok tuşları ile kontrol (Opsiyonel)
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowRight') {
-                changeCard(1);
-            } else if (event.key === 'ArrowLeft') {
-                changeCard(-1);
-            } else if (event.key === ' ') { // Boşluk tuşu ile çevirme
-                event.preventDefault(); // Sayfanın kaymasını engeller
-                flipCurrentCard();
-            }
-        });
-    </script>
-</body>
-</html>
+    .nav-button:hover {
+        background-color: #0097a7;
+    }
+    
+    .nav-button:disabled {
+        background-color: #b2ebf2;
+        cursor: not-allowed;
+    }
+    
+    .flip-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #8bc34a;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: background-color 0.3s;
+    }
+    
+    .flip-button:hover {
+        background-color: #689f38;
+    }
+</style>
