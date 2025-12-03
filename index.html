@@ -1,133 +1,206 @@
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: #f4f4f9;
-        margin: 0;
-    }
-
-    /* --- Kart Kapsayıcı (Görüntüleme Alanı) --- */
-    .card-container {
-        position: relative;
-        width: 250px; /* TEK KART GENİŞLİĞİNE EŞİT */
-        height: 200px;
-        overflow: hidden; /* **ÖNEMLİ:** Sadece tek kartın görünmesini sağlar */
-        margin-bottom: 20px;
-    }
-
-    /* --- Tüm Kartları İçeren Şerit --- */
-    .card-slider {
-        /* **ÖNEMLİ DÜZELTME:** Tüm kartların yan yana durmasını sağlar */
-        display: flex; 
-        width: 100%; 
-        height: 100%;
-        transition: transform 0.4s ease-in-out; 
-    }
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Kartı - Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    /* --- Kart Stili --- */
-    .flip-card {
-        flex-shrink: 0; /* **ÖNEMLİ:** Kartların küçülmesini veya sığmaya çalışmasını engeller */
-        background-color: transparent;
-        width: 250px; /* Kart genişliği 250px olarak sabit */
-        height: 200px;
-        perspective: 1000px; 
-        margin-right: 0; 
-    }
+    <style>
+        /* Genel Sayfa Düzeni */
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* Geri kalan kart ve buton stilleri aynı kalmalı */
-    .flip-card-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        transition: transform 0.6s; 
-        transform-style: preserve-3d; 
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
-        border-radius: 10px;
-    }
+        /* Kartın Kendisi */
+        .card {
+            background-color: white;
+            width: 320px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
 
-    .flip-card-inner.flipped {
-         transform: rotateY(180deg);
-    }
+        /* Üst Başlık Kısmı */
+        .header {
+            margin-bottom: 10px;
+        }
 
-    .flip-card-front, .flip-card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden; 
-        backface-visibility: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-radius: 10px;
-        padding: 10px;
-        box-sizing: border-box;
-    }
+        .word-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .flip-card-front {
-        background-color: #3f51b5; 
-        color: white;
-        font-size: 1.8em;
-        font-weight: bold;
-    }
+        .speaker-icon {
+            color: #f1c40f; /* Sarı ikon rengi */
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
 
-    .flip-card-back {
-        background-color: #ff9800; 
-        color: black;
-        transform: rotateY(180deg); 
-        font-size: 1.3em;
-        line-height: 1.4;
-    }
+        .speaker-icon:hover {
+            transform: scale(1.1);
+        }
 
-    .word-turkish {
-        font-weight: bold;
-        margin-top: 5px;
-    }
+        h1 {
+            color: #4a5568;
+            margin: 0;
+            font-size: 32px;
+            font-weight: 800;
+        }
 
-    .button-container {
-        display: flex;
-        gap: 15px;
-    }
+        .meaning {
+            color: #718096;
+            margin-top: 5px;
+            margin-left: 38px; /* İkon hizası */
+            font-size: 16px;
+        }
 
-    .nav-button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        background-color: #00bcd4;
-        color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        transition: background-color 0.3s;
-    }
+        /* Görsel Alanı */
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
 
-    .nav-button:hover {
-        background-color: #0097a7;
-    }
-    
-    .nav-button:disabled {
-        background-color: #b2ebf2;
-        cursor: not-allowed;
-    }
-    
-    .flip-button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        background-color: #8bc34a;
-        color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        transition: background-color 0.3s;
-    }
-    
-    .flip-button:hover {
-        background-color: #689f38;
-    }
-</style>
+        .main-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 180px;
+        }
+
+        /* Şimşek İkonu (Süsleme) */
+        .flash-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            color: #f6e05e;
+            font-size: 24px;
+        }
+
+        /* Örnek Cümle Kutusu */
+        .box {
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tag {
+            font-weight: bold;
+            color: #ecc94b; /* Sarımsı etiket rengi */
+            font-size: 14px;
+            min-width: 30px;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .en-sentence {
+            color: #4a5568;
+            font-size: 15px;
+            margin: 0 0 8px 0;
+            line-height: 1.4;
+        }
+
+        /* Yeşil Vurgu */
+        .highlight {
+            color: #9bca3c; /* Görseldeki yeşil tonu */
+            font-weight: bold;
+        }
+
+        /* Kesikli Çizgi */
+        .divider {
+            border-top: 1px dotted #cbd5e0;
+            margin: 5px 0;
+        }
+
+        .tr-sentence {
+            color: #718096;
+            font-size: 14px;
+            margin: 5px 0 0 0;
+        }
+
+        /* Eş Anlamlılar Kutusu */
+        .synonyms-text {
+            color: #4a5568;
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        .box.small {
+            padding: 12px 15px;
+            border-radius: 30px; /* Daha yuvarlak */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="word-row">
+                <i class="fas fa-volume-up speaker-icon" onclick="speakWord('practice')"></i>
+                <h1>practice</h1>
+            </div>
+            <p class="meaning">uygulama, pratik</p>
+        </div>
+
+        <div class="image-container">
+            <img src="https://img.freepik.com/free-vector/soccer-player-action_23-2147515866.jpg?w=740" alt="Futbol Oynayan Çocuk" class="main-img">
+            <i class="fas fa-bolt flash-icon"></i>
+        </div>
+
+        <div class="box">
+            <div class="row">
+                <span class="tag">Ör.</span>
+                <div class="content">
+                    <p class="en-sentence">With a little more <span class="highlight">practice</span> you should be able to pass your test.</p>
+                    <div class="divider"></div>
+                    <p class="tr-sentence">Biraz daha pratik ile testi geçebilmen lazım.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="box small">
+            <div class="row">
+                <span class="tag">Eş An.</span>
+                <div class="content">
+                    <p class="synonyms-text">exercise, routine</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tarayıcının konuşma özelliğini kullanan fonksiyon
+        function speakWord(text) {
+            // Eğer tarayıcı destekliyorsa
+            if ('speechSynthesis' in window) {
+                var msg = new SpeechSynthesisUtterance();
+                msg.text = text;
+                msg.lang = 'en-US'; // İngilizce aksanı
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("Tarayıcınız sesli okumayı desteklemiyor.");
+            }
+        }
+    </script>
+
+</body>
+</html>
