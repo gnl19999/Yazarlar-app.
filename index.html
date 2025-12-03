@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinamik Kelime Kartı | Tam Ekran</title>
+    <title>Dinamik Kelime Kartı | Görsel Eşleştirme</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -13,35 +13,22 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0; /* Sayfa kenar boşluklarını sıfırladık */
-            margin: 0;   /* Sayfa kenar boşluklarını sıfırladık */
+            padding: 30px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            justify-content: flex-start; /* İçeriği yukarı hizala */
-        }
-        
-        /* Kartı Kapsayan Alan */
-        #card-container {
-            width: 100%; /* Kapsayıcının tüm genişliği kaplamasını sağla */
-            display: flex;
-            justify-content: center; /* Kartı merkezle */
+            margin: 0;
+            justify-content: center;
         }
 
         /* Kartın Kendisi */
         .card {
-            /* DEĞİŞİKLİK BURADA: %90 genişlik ile kenarlarda boşluk bırakılır */
-            width: 90%; 
-            /* VEYA: Aşağıdaki gibi kullanarak kenarlarda 20px boşluk bırakabilirsiniz: */
-            /* width: calc(100% - 40px); */
-
-            max-width: 450px; /* Büyük ekranlarda kartın çok büyümesini engelle */
-            
             background-color: white;
+            width: 350px;
             border-radius: 20px;
-            padding: 20px; /* İç boşluğu biraz azalttık */
+            padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             position: relative;
-            margin: 20px 0; /* Sadece üstten ve alttan boşluk bırak */
+            margin-top: 20px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -51,7 +38,7 @@
             transform: scale(0.98);
         }
 
-        /* Kart İçeriği Stilleri (Öncekiyle aynı, güncel) */
+        /* Kart İçeriği Stilleri */
         .header { margin-bottom: 15px; }
         .word-row { display: flex; align-items: center; gap: 15px; }
         .speaker-icon { 
@@ -64,6 +51,7 @@
         h1 { color: #2D3748; margin: 0; font-size: 36px; font-weight: 800; }
         .meaning { color: #718096; margin-top: 5px; margin-left: 43px; font-size: 18px; font-weight: 500;}
         .image-container { text-align: center; margin: 25px 0; position: relative; }
+        /* Yeni: Görselin kapsayıcıya sığmasını garantilemek için styles */
         .main-img { max-width: 100%; height: auto; max-height: 180px; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; } 
         .flash-icon { position: absolute; bottom: 5px; right: 5px; color: #f6e05e; font-size: 24px; }
         
@@ -92,12 +80,6 @@
             font-weight: 500;
         }
 
-        /* Iframe Stili (Eklenen kısım) */
-        iframe {
-            max-width: 100% !important; 
-            height: auto; 
-        }
-
     </style>
 </head>
 <body>
@@ -108,7 +90,7 @@
     <div id="info-bar" class="info-bar">Kart 1 / 20</div>
 
     <script>
-        // Kelime Listesi ve Eşleşen Görsel URL'leri (Verileriniz aynı kaldı)
+        // Kelime Listesi ve Eşleşen Görsel URL'leri
         const wordList = [
             { word: "about", meaning: "hakkında, yaklaşık", example_en: "Tell me [about] your day.", example_tr: "Bana gününden bahset.", synonyms: "concerning, nearly", image: "https://images.pexels.com/photos/34707724/pexels-photo-34707724/free-photo-of-turkiye-karayollarinda-klasik-volkswagen-beetle.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
             { word: "above", meaning: "yukarıda, üstünde", example_en: "The bird flew [above] the clouds.", example_tr: "Kuş bulutların üzerinde uçtu.", synonyms: "over, higher than", image: "https://www.shutterstock.com/image-vector/hands-letting-go-dove-under-600nw-2509616537.jpg" },
@@ -150,10 +132,13 @@
         function createCard(data) {
             const { word, meaning, image, example_en, example_tr, synonyms } = data;
             
+            // İngilizce cümleyi alıp, kelimeyi köşeli parantez içinde arar ve vurgular.
+            // Köşeli parantez yoksa da kelimeyi direkt vurgular.
             const highlightedExample = example_en
                 .replace(`[${word}]`, `<span class="highlight">${word}</span>`)
                 .replace(new RegExp(`\\b${word}\\b`, 'gi'), `<span class="highlight">${word}</span>`);
             
+            // Eş anlamlıları virgül ile ayırıp kartta gösterir
             const synonymsText = synonyms || 'Yok';
 
             const cardHTML = `
@@ -204,7 +189,10 @@
 
         // Sonraki Karta Geçme Fonksiyonu
         function nextCard() {
+            // Bir sonraki indekse geç, listenin sonuna gelince başa dön
             currentIndex = (currentIndex + 1) % wordList.length;
+            
+            // Yeni kartı oluştur
             createCard(wordList[currentIndex]);
         }
 
