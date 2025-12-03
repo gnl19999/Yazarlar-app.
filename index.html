@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinamik Kelime Kartı | Navigator</title>
+    <title>Dinamik Kelime Kartı | Görsel Eşleştirme</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -15,7 +15,7 @@
             align-items: center;
             padding: 30px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh; /* Tüm ekranı kapla */
+            min-height: 100vh;
             margin: 0;
             justify-content: center;
         }
@@ -23,13 +23,13 @@
         /* Kartın Kendisi */
         .card {
             background-color: white;
-            width: 350px; /* Biraz daha geniş */
+            width: 350px;
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* Daha belirgin gölge */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             position: relative;
             margin-top: 20px;
-            cursor: pointer; /* Tıklanabilir olduğunu göster */
+            cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
@@ -42,7 +42,7 @@
         .header { margin-bottom: 15px; }
         .word-row { display: flex; align-items: center; gap: 15px; }
         .speaker-icon { 
-            color: #1976D2; /* Daha profesyonel bir renk */
+            color: #1976D2;
             font-size: 28px; 
             cursor: pointer; 
             transition: transform 0.2s; 
@@ -51,7 +51,8 @@
         h1 { color: #2D3748; margin: 0; font-size: 36px; font-weight: 800; }
         .meaning { color: #718096; margin-top: 5px; margin-left: 43px; font-size: 18px; font-weight: 500;}
         .image-container { text-align: center; margin: 25px 0; position: relative; }
-        .main-img { max-width: 100%; height: auto; max-height: 180px; object-fit: cover; border-radius: 10px;}
+        /* Yeni: Görselin kapsayıcıya sığmasını garantilemek için styles */
+        .main-img { max-width: 100%; height: auto; max-height: 180px; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; } 
         .flash-icon { position: absolute; bottom: 5px; right: 5px; color: #f6e05e; font-size: 24px; }
         
         .box { 
@@ -59,13 +60,13 @@
             border-radius: 15px; 
             padding: 15px; 
             margin-bottom: 12px; 
-            background: #F7FAFC; /* Hafif arka plan */
+            background: #F7FAFC;
         }
         .row { display: flex; gap: 10px; }
         .tag { font-weight: bold; color: #1976D2; font-size: 14px; min-width: 30px; }
         .content { flex: 1; }
         .en-sentence { color: #2D3748; font-size: 16px; margin: 0 0 8px 0; line-height: 1.5; }
-        .highlight { color: #E53E3E; /* Vurgu rengi */ font-weight: bold; }
+        .highlight { color: #E53E3E; font-weight: bold; }
         .divider { border-top: 1px dotted #CBD5E0; margin: 5px 0; }
         .tr-sentence { color: #718096; font-size: 15px; margin: 5px 0 0 0; }
         .synonyms-text { color: #2D3748; margin: 0; font-size: 15px; }
@@ -86,38 +87,38 @@
     <div id="card-container">
         </div>
     
-    <div id="info-bar" class="info-bar">Kart 1 / 15</div>
+    <div id="info-bar" class="info-bar">Kart 1 / 20</div>
 
     <script>
-        // Kelime Listesi
+        // Kelime Listesi ve Eşleşen Görsel URL'leri
         const wordList = [
-            { word: "about", meaning: "hakkında, yaklaşık", example_en: "Tell me [about] your day.", example_tr: "Bana gününden bahset.", image: "https://via.placeholder.com/350x180/1976D2/FFFFFF?text=about", synonyms: "concerning, nearly" },
-            { word: "above", meaning: "yukarıda, üstünde", example_en: "The bird flew [above] the clouds.", example_tr: "Kuş bulutların üzerinde uçtu.", image: "https://via.placeholder.com/350x180/F44336/FFFFFF?text=above", synonyms: "over, higher than" },
-            { word: "across", meaning: "karşısında, diğer tarafta", example_en: "They walked [across] the road.", example_tr: "Yolun karşısına yürüdüler.", image: "https://via.placeholder.com/350x180/FFC107/333333?text=across", synonyms: "over, through" },
-            { word: "action", meaning: "eylem, hareket", example_en: "It's time for [action].", example_tr: "Harekete geçme zamanı.", image: "https://via.placeholder.com/350x180/4CAF50/FFFFFF?text=action", synonyms: "deed, operation" },
-            { word: "activity", meaning: "etkinlik, faaliyet", example_en: "What is your favorite weekend [activity]?", example_tr: "Favori hafta sonu etkinliğin nedir?", image: "https://via.placeholder.com/350x180/00BCD4/FFFFFF?text=activity", synonyms: "pursuit, exercise" },
-            { word: "actor", meaning: "erkek oyuncu", example_en: "He is a famous [actor] from Hollywood.", example_tr: "O, Hollywood'dan ünlü bir erkek oyuncu.", image: "https://via.placeholder.com/350x180/9C27B0/FFFFFF?text=actor", synonyms: "performer, player" },
-            { word: "actress", meaning: "kadın oyuncu", example_en: "She wants to be an [actress].", example_tr: "O, kadın oyuncu olmak istiyor.", image: "https://via.placeholder.com/350x180/E91E63/FFFFFF?text=actress", synonyms: "performer, star" },
-            { word: "add", meaning: "eklemek, toplamak", example_en: "Please [add] milk to your coffee.", example_tr: "Lütfen kahvene süt ekle.", image: "https://via.placeholder.com/350x180/FF9800/FFFFFF?text=add", synonyms: "include, append" },
-            { word: "address", meaning: "adres, hitap etmek", example_en: "What is your home [address]?", example_tr: "Ev adresiniz nedir?", image: "https://via.placeholder.com/350x180/795548/FFFFFF?text=address", synonyms: "location, place" },
-            { word: "adult", meaning: "yetişkin", example_en: "An [adult] must accompany the child.", example_tr: "Çocuğa bir yetişkin eşlik etmelidir.", image: "https://via.placeholder.com/350x180/607D8B/FFFFFF?text=adult", synonyms: "grown-up, mature" },
-            { word: "advice", meaning: "tavsiye", example_en: "I need some good [advice].", example_tr: "İyi bir tavsiyeye ihtiyacım var.", image: "https://via.placeholder.com/350x180/8BC34A/FFFFFF?text=advice", synonyms: "suggestion, counsel" },
-            { word: "afraid", meaning: "korkmuş, çekinmiş", example_en: "Don't be [afraid] of the dark.", example_tr: "Karanlıktan korkma.", image: "https://via.placeholder.com/350x180/CDDC39/333333?text=afraid", synonyms: "scared, fearful" },
-            { word: "after", meaning: "sonra, ardından", example_en: "Call me [after] the meeting.", example_tr: "Toplantıdan sonra beni ara.", image: "https://via.placeholder.com/350x180/FFEB3B/333333?text=after", synonyms: "following, later" },
-            { word: "afternoon", meaning: "öğleden sonra", example_en: "We will meet this [afternoon].", example_tr: "Bu öğleden sonra buluşacağız.", image: "https://via.placeholder.com/350x180/FF5722/FFFFFF?text=afternoon", synonyms: "post-meridiem, P.M." },
-            { word: "again", meaning: "tekrar, yine", example_en: "Try [again] if you fail.", example_tr: "Başarısız olursan tekrar dene.", image: "https://via.placeholder.com/350x180/795548/FFFFFF?text=again", synonyms: "once more, anew" },
-            { word: "age", meaning: "yaş, çağ", example_en: "What is your current [age]?", example_tr: "Şu anki yaşın kaç?", image: "https://via.placeholder.com/350x180/607D8B/FFFFFF?text=age", synonyms: "years, lifetime" },
-            { word: "ago", meaning: "önce (geçmişte)", example_en: "It happened two years [ago].", example_tr: "İki yıl önce oldu.", image: "https://via.placeholder.com/350x180/8BC34A/FFFFFF?text=ago", synonyms: "in the past" },
-            { word: "agree", meaning: "katılmak, aynı fikirde olmak", example_en: "Do you [agree] with my plan?", example_tr: "Planıma katılıyor musun?", image: "https://via.placeholder.com/350x180/CDDC39/333333?text=agree", synonyms: "concur, assent" },
-            { word: "air", meaning: "hava, atmosfer", example_en: "The [air] is fresh after the rain.", example_tr: "Yağmurdan sonra hava temiz.", image: "https://via.placeholder.com/350x180/009688/FFFFFF?text=air", synonyms: "atmosphere, breeze" },
-            { word: "airport", meaning: "havaalanı", example_en: "We drove to the [airport].", example_tr: "Havaalanına araba sürdük.", image: "https://via.placeholder.com/350x180/03A9F4/FFFFFF?text=airport", synonyms: "airfield, terminal" }
+            { word: "about", meaning: "hakkında, yaklaşık", example_en: "Tell me [about] your day.", example_tr: "Bana gününden bahset.", synonyms: "concerning, nearly", image: "https://images.pexels.com/photos/34707724/pexels-photo-34707724/free-photo-of-turkiye-karayollarinda-klasik-volkswagen-beetle.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+            { word: "above", meaning: "yukarıda, üstünde", example_en: "The bird flew [above] the clouds.", example_tr: "Kuş bulutların üzerinde uçtu.", synonyms: "over, higher than", image: "https://www.shutterstock.com/image-vector/hands-letting-go-dove-under-600nw-2509616537.jpg" },
+            { word: "across", meaning: "karşısında, diğer tarafta", example_en: "They walked [across] the road.", example_tr: "Yolun karşısına yürüdüler.", synonyms: "over, through", image: "https://media.istockphoto.com/id/857581748/tr/vekt%C3%B6r/%C3%A7ocuklar-i%C3%A7in-bir-ye%C5%9Fil-trafik-%C4%B1%C5%9F%C4%B1%C4%9F%C4%B1-kar%C5%9F%C4%B1dan-kar%C5%9F%C4%B1ya.jpg?s=612x612&w=0&k=20&c=EqE59ouYaszBVwnzuMAL_6rrHD4dDF6_BCsnx3Z5nJs=" },
+            { word: "action", meaning: "eylem, hareket", example_en: "It's time for [action].", example_tr: "Harekete geçme zamanı.", synonyms: "deed, operation", image: "https://st3.depositphotos.com/4216129/15001/v/450/depositphotos_150017902-stock-illustration-roller-skating-boy-set-for.jpg" },
+            { word: "activity", meaning: "etkinlik, faaliyet", example_en: "What is your favorite weekend [activity]?", example_tr: "Favori hafta sonu etkinliğin nedir?", synonyms: "pursuit, exercise", image: "https://img.freepik.com/premium-vektor/roller-parki-kaykay-paten-eldivenler-kask-sehirli-gencler-icin-aksiyon-aktiviteleri-goz-alici-vektor-duz-resimler-seti_80590-16492.jpg" },
+            { word: "actor", meaning: "erkek oyuncu", example_en: "He is a famous [actor] from Hollywood.", example_tr: "O, Hollywood'dan ünlü bir erkek oyuncu.", synonyms: "performer, player", image: "https://media.istockphoto.com/id/1291855821/tr/vekt%C3%B6r/set-vekt%C3%B6r-karikat%C3%BCr-performans-profesyonel-erkek-oyuncu.jpg?s=612x612&w=0&k=20&c=l_gVewF9KO5Mxq7Zv1BEWpT5Lv1Yv-F8zbLSjsaySZU=" },
+            { word: "actress", meaning: "kadın oyuncu", example_en: "She wants to be an [actress].", example_tr: "O, kadın oyuncu olmak istiyor.", synonyms: "performer, star", image: "https://st2.depositphotos.com/2379655/44923/v/450/depositphotos_449238966-stock-illustration-actress-filming-female-superhero-blockbuster.jpg" },
+            { word: "add", meaning: "eklemek, toplamak", example_en: "Please [add] milk to your coffee.", example_tr: "Lütfen kahvene süt ekle.", synonyms: "include, append", image: "https://us.123rf.com/450wm/baldyrgan/baldyrgan1309/baldyrgan130900118/22337936-vector-set-of-coffee-cups-icons-stylized-sketch-symbols.jpg?ver=6" },
+            { word: "address", meaning: "adres, hitap etmek", example_en: "What is your home [address]?", example_tr: "Ev adresiniz nedir?", synonyms: "location, place", image: "https://media.istockphoto.com/id/535913739/vector/vector-map-with-pin-pointer-illustration.jpg?s=612x612&w=0&k=20&c=k70y-GYfXRUiuSdq7ie_BF9Mvry6XlgZV3ENFR-TDJk=" },
+            { word: "adult", meaning: "yetişkin", example_en: "An [adult] must accompany the child.", example_tr: "Çocuğa bir yetişkin eşlik etmelidir.", synonyms: "grown-up, mature", image: "https://img.freepik.com/premium-vector/family-mom-dad-are-holding-baby-their-arms-motherhood-paternity-vector-illustration_623474-129.jpg" },
+            { word: "advice", meaning: "tavsiye", example_en: "I need some good [advice].", example_tr: "İyi bir tavsiyeye ihtiyacım var.", synonyms: "suggestion, counsel", image: "https://www.shutterstock.com/image-vector/two-people-enjoy-casual-conversation-600nw-2670882191.jpg" },
+            { word: "afraid", meaning: "korkmuş, çekinmiş", example_en: "Don't be [afraid] of the dark.", example_tr: "Karanlıktan korkma.", synonyms: "scared, fearful", image: "https://www.novakid.com.tr/blog/wp-content/uploads/2025/01/karanliktan-korkan-cocuk-e1737721587278.webp" },
+            { word: "after", meaning: "sonra, ardından", example_en: "Call me [after] the meeting.", example_tr: "Toplantıdan sonra beni ara.", synonyms: "following, later", image: "https://www.shutterstock.com/image-vector/phone-call-icon-accept-decline-260nw-2652811141.jpg" },
+            { word: "afternoon", meaning: "öğleden sonra", example_en: "We will meet this [afternoon].", example_tr: "Bu öğleden sonra buluşacağız.", synonyms: "post-meridiem, P.M.", image: "https://media.istockphoto.com/id/1284525512/tr/vekt%C3%B6r/farkl%C4%B1-yiyecekleri-izole-yiyen-insanlar-vekt%C3%B6r-adam-ve-kad%C4%B1n-ana-yemekler-ve-aperatifler.jpg?s=612x612&w=0&k=20&c=etO5o2rqbDKfur3kwYvlPYFunV3VHjhx6xp7Q83t4Po=" },
+            { word: "again", meaning: "tekrar, yine", example_en: "Try [again] if you fail.", example_tr: "Başarısız olursan tekrar dene.", synonyms: "once more, anew", image: "https://media.istockphoto.com/id/1040357064/vector/reload.jpg?s=612x612&w=0&k=20&c=-fu_k3RUHOZ0-dg0rBfGb-asxRNGGI8PHl9dxkMHoaQ=" },
+            { word: "age", meaning: "yaş, çağ", example_en: "What is your current [age]?", example_tr: "Şu anki yaşın kaç?", synonyms: "years, lifetime", image: "https://www.pergamonklinik.com/view/uploads/6409959c5f4da167834972452.jpg" },
+            { word: "ago", meaning: "önce (geçmişte)", example_en: "It happened two years [ago].", example_tr: "İki yıl önce oldu.", synonyms: "in the past", image: "https://www.vektorler.com/wp-content/uploads/2020/03/vektorel-deprem.jpg" },
+            { word: "agree", meaning: "katılmak, aynı fikirde olmak", example_en: "Do you [agree] with my plan?", example_tr: "Planıma katılıyor musun?", synonyms: "concur, assent", image: "https://img.freepik.com/vektoren-kostenlos/hand-gezeichnete-leute-die-fragen-illustration-stellen_23-2148902091.jpg" },
+            { word: "air", meaning: "hava, atmosfer", example_en: "The [air] is fresh after the rain.", example_tr: "Yağmurdan sonra hava temiz.", synonyms: "atmosphere, breeze", image: "https://media.baamboozle.com/uploads/images/453498/1634571826_14982_url.jpeg" },
+            { word: "airport", meaning: "havaalanı", example_en: "We drove to the [airport].", example_tr: "Havaalanına araba sürdük.", synonyms: "airfield, terminal", image: "https://st2.depositphotos.com/2704315/8710/v/450/depositphotos_87107278-stock-illustration-airport-with-infographic-elements-templates.jpg" }
         ];
 
         let currentIndex = 0;
         const container = document.getElementById('card-container');
         const infoBar = document.getElementById('info-bar');
 
-        // Sesli Okuma Fonksiyonu (Aynı kaldı)
+        // Sesli Okuma Fonksiyonu
         function speakWord(text) {
             if ('speechSynthesis' in window) {
                 const msg = new SpeechSynthesisUtterance();
@@ -135,7 +136,7 @@
             // Köşeli parantez yoksa da kelimeyi direkt vurgular.
             const highlightedExample = example_en
                 .replace(`[${word}]`, `<span class="highlight">${word}</span>`)
-                .replace(new RegExp(`\\b${word}\\b`, 'gi'), `<span class="highlight">${word}</span>`); // \b kelime sınırları için
+                .replace(new RegExp(`\\b${word}\\b`, 'gi'), `<span class="highlight">${word}</span>`);
             
             // Eş anlamlıları virgül ile ayırıp kartta gösterir
             const synonymsText = synonyms || 'Yok';
