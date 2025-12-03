@@ -3,23 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İngilizce Kelime Kartları</title>
+    <title>Dinamik Kelime Kartı</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- Temel Ayarlar --- */
+        /* CSS Kodları (Önceki Kart Tasarımının Aynısı) */
         body {
             background-color: #f0f2f5;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            padding: 30px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* --- Kart Tasarımı --- */
+        /* Form Stili */
+        .input-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            width: 320px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .input-form input, .input-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .input-form button {
+            background-color: #9bca3c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .input-form button:hover {
+            background-color: #7baa2e;
+        }
+
+        /* Kartın Kendisi */
         .card {
             background-color: white;
             width: 320px;
@@ -27,136 +62,138 @@
             padding: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             position: relative;
-            transition: all 0.3s ease;
+            margin-top: 20px;
         }
 
-        /* Header */
+        /* Kart İçeriği Stilleri (Önceki ile aynı) */
         .header { margin-bottom: 10px; }
         .word-row { display: flex; align-items: center; gap: 10px; }
-        
-        .speaker-icon {
-            color: #f1c40f;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+        .speaker-icon { color: #f1c40f; font-size: 24px; cursor: pointer; transition: transform 0.2s; }
         .speaker-icon:hover { transform: scale(1.1); }
-
-        h1 {
-            color: #4a5568;
-            margin: 0;
-            font-size: 32px;
-            font-weight: 800;
-            text-transform: lowercase; /* Kelimeleri küçük harf yapar */
-        }
-
-        .meaning {
-            color: #718096;
-            margin-top: 5px;
-            margin-left: 38px;
-            font-size: 16px;
-        }
-
-        /* Görsel Alanı */
-        .image-container {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-            height: 180px;
-            background-color: #edf2f7;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .main-img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-        }
-
-        .flash-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            color: #f6e05e;
-            font-size: 24px;
-            z-index: 2;
-        }
-
-        /* Kutular */
-        .box {
-            border: 1px solid #e2e8f0;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: #fff;
-        }
-        .box.small { padding: 10px 15px; border-radius: 30px; }
-
+        h1 { color: #4a5568; margin: 0; font-size: 32px; font-weight: 800; }
+        .meaning { color: #718096; margin-top: 5px; margin-left: 38px; font-size: 16px; }
+        .image-container { text-align: center; margin: 20px 0; position: relative; }
+        .main-img { max-width: 100%; height: auto; max-height: 180px; }
+        .flash-icon { position: absolute; bottom: 0; right: 0; color: #f6e05e; font-size: 24px; }
+        .box { border: 1px solid #e2e8f0; border-radius: 15px; padding: 15px; margin-bottom: 10px; background: #fff; }
         .row { display: flex; gap: 10px; }
-        
-        .tag {
-            font-weight: bold;
-            color: #ecc94b;
-            font-size: 14px;
-            min-width: 45px;
-        }
-
+        .tag { font-weight: bold; color: #ecc94b; font-size: 14px; min-width: 30px; }
         .content { flex: 1; }
-
-        .en-sentence {
-            color: #4a5568;
-            font-size: 15px;
-            margin: 0 0 8px 0;
-            line-height: 1.4;
-        }
-
+        .en-sentence { color: #4a5568; font-size: 15px; margin: 0 0 8px 0; line-height: 1.4; }
         .highlight { color: #9bca3c; font-weight: bold; }
         .divider { border-top: 1px dotted #cbd5e0; margin: 5px 0; }
         .tr-sentence { color: #718096; font-size: 14px; margin: 5px 0 0 0; }
         .synonyms-text { color: #4a5568; margin: 0; font-size: 14px; }
-
-        /* --- Navigasyon Butonları --- */
-        .controls {
-            margin-top: 20px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        button {
-            background-color: #4a5568;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-
-        button:hover { background-color: #2d3748; }
-        
-        .counter {
-            font-weight: bold;
-            color: #718096;
-        }
+        .box.small { padding: 12px 15px; border-radius: 30px; }
 
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="header">
-            <div class="word-row">
-                <i class="fas fa-volume-up speaker-icon" onclick="speakCurrentWord()"></i>
-                <h1 id="wordTitle">...</h1>
-            </div>
-            <p class="meaning" id="wordMeaning">...</p>
+    <div class="input-form">
+        <h3>Kelime Bilgilerini Girin</h3>
+        <input type="text" id="word" placeholder="İngilizce Kelime (practice)" value="practice">
+        <input type="text" id="meaning" placeholder="Türkçe Anlamı (uygulama, pratik)" value="uygulama, pratik">
+        <input type="text" id="image" placeholder="Resim URL'si (ör. https://...jpg)" value="https://img.freepik.com/free-vector/soccer-player-action_23-2147515866.jpg?w=740">
+        <textarea id="enExample" placeholder="İngilizce Örnek Cümle" rows="2">With a little more [practice] you should be able to pass your test.</textarea>
+        <textarea id="trExample" placeholder="Türkçe Örnek Cümle" rows="2">Biraz daha pratik ile testi geçebilmen lazım.</textarea>
+        <input type="text" id="synonyms" placeholder="Eş Anlamlılar (exercise, routine)" value="exercise, routine">
+        <button onclick="createCard()">Kart Oluştur</button>
+    </div>
+    
+    <div id="card-container">
         </div>
 
-        <div class="image-container">
-            <img id="wordImage" src="" alt="Kelime Görseli" class="main-img">
+    <script>
+        // Sesli Okuma Fonksiyonu (Önceki ile aynı)
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                var msg = new SpeechSynthesisUtterance();
+                msg.text = text;
+                msg.lang = 'en-US'; 
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        // Ana Kart Oluşturma Fonksiyonu
+        function createCard() {
+            // 1. Girdileri al
+            const word = document.getElementById('word').value;
+            const meaning = document.getElementById('meaning').value;
+            const imageUrl = document.getElementById('image').value;
+            const enExample = document.getElementById('enExample').value;
+            const trExample = document.getElementById('trExample').value;
+            const synonyms = document.getElementById('synonyms').value;
+            const container = document.getElementById('card-container');
+
+            if (!word) {
+                alert("Lütfen bir kelime girin.");
+                return;
+            }
+
+            // 2. İngilizce cümleyi alıp, kelimeyi köşeli parantez içinde arar ve vurgular.
+            // Örn: "a little more [practice]" -> kelimeyi highlight sınıfına alır.
+            const highlightedExample = enExample.replace(
+                `[${word}]`, 
+                `<span class="highlight">${word}</span>`
+            ).replace(
+                word, 
+                `<span class="highlight">${word}</span>`
+            ); // Köşeli parantez yoksa da kelimeyi direkt vurgula
+
+            // 3. Kartın HTML yapısını oluştur
+            const cardHTML = `
+                <div class="card">
+                    <div class="header">
+                        <div class="word-row">
+                            <i class="fas fa-volume-up speaker-icon" onclick="speakWord('${word}')"></i>
+                            <h1>${word}</h1>
+                        </div>
+                        <p class="meaning">${meaning}</p>
+                    </div>
+
+                    <div class="image-container">
+                        <img src="${imageUrl}" alt="${word} Görseli" class="main-img">
+                        <i class="fas fa-bolt flash-icon"></i>
+                    </div>
+
+                    <div class="box">
+                        <div class="row">
+                            <span class="tag">Ör.</span>
+                            <div class="content">
+                                <p class="en-sentence">${highlightedExample}</p>
+                                <div class="divider"></div>
+                                <p class="tr-sentence">${trExample}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box small">
+                        <div class="row">
+                            <span class="tag">Eş An.</span>
+                            <div class="content">
+                                <p class="synonyms-text">${synonyms}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 4. Yeni kartı container'ın başına ekle (en yeni kart üstte)
+            container.insertAdjacentHTML('afterbegin', cardHTML);
+        }
+
+        // Sayfa yüklendiğinde bir başlangıç kartı oluştur (Girdileri de temizler)
+        window.onload = function() {
+            createCard(); 
+            // Formu temizle
+            document.getElementById('word').value = '';
+            document.getElementById('meaning').value = '';
+            document.getElementById('image').value = '';
+            document.getElementById('enExample').value = '';
+            document.getElementById('trExample').value = '';
+            document.getElementById('synonyms').value = '';
+        };
+    </script>
+</body>
+</html>
