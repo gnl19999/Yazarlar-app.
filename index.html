@@ -51,7 +51,6 @@
         h1 { color: #2D3748; margin: 0; font-size: 36px; font-weight: 800; }
         .meaning { color: #718096; margin-top: 5px; margin-left: 43px; font-size: 18px; font-weight: 500;}
         .image-container { text-align: center; margin: 25px 0; position: relative; }
-        /* Yeni: Görselin kapsayıcıya sığmasını garantilemek için styles */
         .main-img { max-width: 100%; height: auto; max-height: 180px; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; } 
         .flash-icon { position: absolute; bottom: 5px; right: 5px; color: #f6e05e; font-size: 24px; }
         
@@ -78,6 +77,12 @@
             margin-top: 10px;
             font-size: 14px;
             font-weight: 500;
+        }
+
+        /* EKLENEN KOD: Iframe Stili */
+        iframe {
+            max-width: 100% !important; 
+            height: auto; 
         }
 
     </style>
@@ -132,13 +137,10 @@
         function createCard(data) {
             const { word, meaning, image, example_en, example_tr, synonyms } = data;
             
-            // İngilizce cümleyi alıp, kelimeyi köşeli parantez içinde arar ve vurgular.
-            // Köşeli parantez yoksa da kelimeyi direkt vurgular.
             const highlightedExample = example_en
                 .replace(`[${word}]`, `<span class="highlight">${word}</span>`)
                 .replace(new RegExp(`\\b${word}\\b`, 'gi'), `<span class="highlight">${word}</span>`);
             
-            // Eş anlamlıları virgül ile ayırıp kartta gösterir
             const synonymsText = synonyms || 'Yok';
 
             const cardHTML = `
@@ -189,10 +191,7 @@
 
         // Sonraki Karta Geçme Fonksiyonu
         function nextCard() {
-            // Bir sonraki indekse geç, listenin sonuna gelince başa dön
             currentIndex = (currentIndex + 1) % wordList.length;
-            
-            // Yeni kartı oluştur
             createCard(wordList[currentIndex]);
         }
 
