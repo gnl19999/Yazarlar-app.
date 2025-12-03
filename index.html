@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinamik Kelime Kartı | Görsel Eşleştirme</title>
+    <title>Dinamik Kelime Kartı | Tam Ekran</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -13,22 +13,35 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px;
+            padding: 0; /* Sayfa kenar boşluklarını sıfırladık */
+            margin: 0;   /* Sayfa kenar boşluklarını sıfırladık */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            margin: 0;
-            justify-content: center;
+            justify-content: flex-start; /* İçeriği yukarı hizala */
+        }
+        
+        /* Kartı Kapsayan Alan */
+        #card-container {
+            width: 100%; /* Kapsayıcının tüm genişliği kaplamasını sağla */
+            display: flex;
+            justify-content: center; /* Kartı merkezle */
         }
 
         /* Kartın Kendisi */
         .card {
+            /* DEĞİŞİKLİK BURADA: %90 genişlik ile kenarlarda boşluk bırakılır */
+            width: 90%; 
+            /* VEYA: Aşağıdaki gibi kullanarak kenarlarda 20px boşluk bırakabilirsiniz: */
+            /* width: calc(100% - 40px); */
+
+            max-width: 450px; /* Büyük ekranlarda kartın çok büyümesini engelle */
+            
             background-color: white;
-            width: 350px;
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px; /* İç boşluğu biraz azalttık */
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             position: relative;
-            margin-top: 20px;
+            margin: 20px 0; /* Sadece üstten ve alttan boşluk bırak */
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -38,7 +51,7 @@
             transform: scale(0.98);
         }
 
-        /* Kart İçeriği Stilleri */
+        /* Kart İçeriği Stilleri (Öncekiyle aynı, güncel) */
         .header { margin-bottom: 15px; }
         .word-row { display: flex; align-items: center; gap: 15px; }
         .speaker-icon { 
@@ -79,7 +92,7 @@
             font-weight: 500;
         }
 
-        /* EKLENEN KOD: Iframe Stili */
+        /* Iframe Stili (Eklenen kısım) */
         iframe {
             max-width: 100% !important; 
             height: auto; 
@@ -95,7 +108,7 @@
     <div id="info-bar" class="info-bar">Kart 1 / 20</div>
 
     <script>
-        // Kelime Listesi ve Eşleşen Görsel URL'leri
+        // Kelime Listesi ve Eşleşen Görsel URL'leri (Verileriniz aynı kaldı)
         const wordList = [
             { word: "about", meaning: "hakkında, yaklaşık", example_en: "Tell me [about] your day.", example_tr: "Bana gününden bahset.", synonyms: "concerning, nearly", image: "https://images.pexels.com/photos/34707724/pexels-photo-34707724/free-photo-of-turkiye-karayollarinda-klasik-volkswagen-beetle.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
             { word: "above", meaning: "yukarıda, üstünde", example_en: "The bird flew [above] the clouds.", example_tr: "Kuş bulutların üzerinde uçtu.", synonyms: "over, higher than", image: "https://www.shutterstock.com/image-vector/hands-letting-go-dove-under-600nw-2509616537.jpg" },
