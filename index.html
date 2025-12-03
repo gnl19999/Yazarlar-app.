@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Kartı - Practice</title>
+    <title>İngilizce Kelime Kartları</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Genel Sayfa Düzeni */
+        /* --- Temel Ayarlar --- */
         body {
             background-color: #f0f2f5;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Kartın Kendisi */
+        /* --- Kart Tasarımı --- */
         .card {
             background-color: white;
             width: 320px;
@@ -26,41 +27,33 @@
             padding: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             position: relative;
+            transition: all 0.3s ease;
         }
 
-        /* Üst Başlık Kısmı */
-        .header {
-            margin-bottom: 10px;
-        }
-
-        .word-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        /* Header */
+        .header { margin-bottom: 10px; }
+        .word-row { display: flex; align-items: center; gap: 10px; }
+        
         .speaker-icon {
-            color: #f1c40f; /* Sarı ikon rengi */
+            color: #f1c40f;
             font-size: 24px;
             cursor: pointer;
             transition: transform 0.2s;
         }
-
-        .speaker-icon:hover {
-            transform: scale(1.1);
-        }
+        .speaker-icon:hover { transform: scale(1.1); }
 
         h1 {
             color: #4a5568;
             margin: 0;
             font-size: 32px;
             font-weight: 800;
+            text-transform: lowercase; /* Kelimeleri küçük harf yapar */
         }
 
         .meaning {
             color: #718096;
             margin-top: 5px;
-            margin-left: 38px; /* İkon hizası */
+            margin-left: 38px;
             font-size: 16px;
         }
 
@@ -69,24 +62,31 @@
             text-align: center;
             margin: 20px 0;
             position: relative;
+            height: 180px;
+            background-color: #edf2f7;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .main-img {
             max-width: 100%;
-            height: auto;
-            max-height: 180px;
+            max-height: 100%;
+            object-fit: cover;
         }
 
-        /* Şimşek İkonu (Süsleme) */
         .flash-icon {
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 10px;
+            right: 10px;
             color: #f6e05e;
             font-size: 24px;
+            z-index: 2;
         }
 
-        /* Örnek Cümle Kutusu */
+        /* Kutular */
         .box {
             border: 1px solid #e2e8f0;
             border-radius: 15px;
@@ -94,22 +94,18 @@
             margin-bottom: 10px;
             background: #fff;
         }
+        .box.small { padding: 10px 15px; border-radius: 30px; }
 
-        .row {
-            display: flex;
-            gap: 10px;
-        }
-
+        .row { display: flex; gap: 10px; }
+        
         .tag {
             font-weight: bold;
-            color: #ecc94b; /* Sarımsı etiket rengi */
+            color: #ecc94b;
             font-size: 14px;
-            min-width: 30px;
+            min-width: 45px;
         }
 
-        .content {
-            flex: 1;
-        }
+        .content { flex: 1; }
 
         .en-sentence {
             color: #4a5568;
@@ -118,34 +114,35 @@
             line-height: 1.4;
         }
 
-        /* Yeşil Vurgu */
-        .highlight {
-            color: #9bca3c; /* Görseldeki yeşil tonu */
-            font-weight: bold;
+        .highlight { color: #9bca3c; font-weight: bold; }
+        .divider { border-top: 1px dotted #cbd5e0; margin: 5px 0; }
+        .tr-sentence { color: #718096; font-size: 14px; margin: 5px 0 0 0; }
+        .synonyms-text { color: #4a5568; margin: 0; font-size: 14px; }
+
+        /* --- Navigasyon Butonları --- */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
 
-        /* Kesikli Çizgi */
-        .divider {
-            border-top: 1px dotted #cbd5e0;
-            margin: 5px 0;
+        button {
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
         }
 
-        .tr-sentence {
-            color: #718096;
-            font-size: 14px;
-            margin: 5px 0 0 0;
-        }
-
-        /* Eş Anlamlılar Kutusu */
-        .synonyms-text {
-            color: #4a5568;
-            margin: 0;
-            font-size: 14px;
-        }
+        button:hover { background-color: #2d3748; }
         
-        .box.small {
-            padding: 12px 15px;
-            border-radius: 30px; /* Daha yuvarlak */
+        .counter {
+            font-weight: bold;
+            color: #718096;
         }
 
     </style>
@@ -155,52 +152,11 @@
     <div class="card">
         <div class="header">
             <div class="word-row">
-                <i class="fas fa-volume-up speaker-icon" onclick="speakWord('practice')"></i>
-                <h1>practice</h1>
+                <i class="fas fa-volume-up speaker-icon" onclick="speakCurrentWord()"></i>
+                <h1 id="wordTitle">...</h1>
             </div>
-            <p class="meaning">uygulama, pratik</p>
+            <p class="meaning" id="wordMeaning">...</p>
         </div>
 
         <div class="image-container">
-            <img src="https://img.freepik.com/free-vector/soccer-player-action_23-2147515866.jpg?w=740" alt="Futbol Oynayan Çocuk" class="main-img">
-            <i class="fas fa-bolt flash-icon"></i>
-        </div>
-
-        <div class="box">
-            <div class="row">
-                <span class="tag">Ör.</span>
-                <div class="content">
-                    <p class="en-sentence">With a little more <span class="highlight">practice</span> you should be able to pass your test.</p>
-                    <div class="divider"></div>
-                    <p class="tr-sentence">Biraz daha pratik ile testi geçebilmen lazım.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="box small">
-            <div class="row">
-                <span class="tag">Eş An.</span>
-                <div class="content">
-                    <p class="synonyms-text">exercise, routine</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Tarayıcının konuşma özelliğini kullanan fonksiyon
-        function speakWord(text) {
-            // Eğer tarayıcı destekliyorsa
-            if ('speechSynthesis' in window) {
-                var msg = new SpeechSynthesisUtterance();
-                msg.text = text;
-                msg.lang = 'en-US'; // İngilizce aksanı
-                window.speechSynthesis.speak(msg);
-            } else {
-                alert("Tarayıcınız sesli okumayı desteklemiyor.");
-            }
-        }
-    </script>
-
-</body>
-</html>
+            <img id="wordImage" src="" alt="Kelime Görseli" class="main-img">
